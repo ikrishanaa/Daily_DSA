@@ -1,111 +1,115 @@
-#!/usr/bin/env python3
-import os, re, subprocess, datetime
-from collections import defaultdict
+import os
+import re
+import json
+from datetime import datetime, timedelta
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CATEGORIES = ["arrays","strings","linked_list","stack","queue","hashing","two_pointers",
-              "sliding_window","binary_search","bit_manip","math","recursion","tree",
-              "graph","greedy","heap","dp","prefix_sum","intervals","matrix","misc"]
+# Paths
+REPO_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+README_PATH = os.path.join(REPO_PATH, "README.md")
+DATA_PATH = os.path.join(REPO_PATH, "tools", "progress.json")
 
-def list_solutions():
-    counts = defaultdict(int)
+CATEGORIES = ["arrays", "strings", "dp", "graphs", "linked_list"]
+
+def count_solved_problems():
     total = 0
-    for cat in CATEGORIES:
-        d = os.path.join(ROOT, cat)
-        if not os.path.isdir(d):
+    category_counts = {}
+
+    for category in CATEGORIES:
+        folder = os.path.join(REPO_PATH, category)
+        if not os.path.exists(folder):
             continue
-        for fn in os.listdir(d):
-            if fn.endswith((".cpp",".py",".java",".ts",".js",".go")):
-                total += 1
-                counts[cat] += 1
-    return total, counts
 
-def make_progress_bar(done, goal=200, width=30):
-    done_slots = min(width, int((done/goal)*width))
-    return f"[{'█'*done_slots}{'░'*(width-done_slots)}] {done}/{goal}"
+        count = len([f for f in os.listdir(folder) if f.endswith(".cpp") or f.endswith(".py")])
+        category_counts[category] = count
+        total += count
 
-def get_repo_dates():
-    # commit dates (local tz of runner); we only need YYYY-MM-DD
-    try:
-        out = subprocess.check_output(
-            ["git","log","--pretty=%cs"], cwd=ROOT, text=True
-        ).strip().splitlines()
-    except subprocess.CalledProcessError:
-        return set()
-    return set(out)
+    return total, category_counts
 
-def current_streak(commit_dates: set):
-    # count consecutive days ending today
-    today = datetime.date.today()
-    streak = 0
-    d = today
-    while d.strftime("%Y-%m-%d") in commit_dates:
-        streak += 1
-        d -= datetime.timedelta(days=1)
-    return streak
+def load_progress():
+    if os.path.exists(DATA_PATH):
+        with open(DATA_PATH, "r") as f:
+            return json.load(f)
+    return {"dates": [], "best_streak": 0}
 
-def longest_streak(commit_dates: set):
-    if not commit_dates:
-        return 0
-    days = sorted(datetime.datetime.strptime(d,"%Y-%m-%d").date() for d in commit_dates)
-    best = cur = 1
-    for i in range(1,len(days)):
-        if (days[i]-days[i-1]).days == 1:
-            cur += 1
+def save_progress(data):
+    with open(DATA_PATH, "w") as f:
+        json.dump(data, f, indent=2)
+
+def calculate_streak(dates):
+    if not dates:
+        return 0, 0
+
+    # Convert strings to date objects
+    dates = sorted(set(datetime.strptime(d, "%Y-%m-%d").date() for d in dates))
+
+    best_streak = 0
+    current_streak = 1
+    temp_streak = 1
+
+    for i in range(1, len(dates)):
+        if dates[i] == dates[i-1] + timedelta(days=1):
+            temp_streak += 1
         else:
-            best = max(best, cur)
-            cur = 1
-    return max(best, cur)
+            temp_streak = 1
+        best_streak = max(best_streak, temp_streak)
 
-def render_table(counts):
-    rows = []
-    for cat in CATEGORIES:
-        if counts.get(cat,0):
-            rows.append(f"| `{cat}` | {counts[cat]} |")
-    if not rows:
-        rows = ["| _No categories yet_ | 0 |"]
-    return "\n".join(["| Category | Solved |","|---|---|", *rows])
+    # Check if streak is ongoing today
+    if dates[-1] == datetime.utcnow().date():
+        current_streak = temp_streak
+    else:
+        current_streak = 0
 
-def update_readme(new_block):
-    readme = os.path.join(ROOT, "README.md")
-    with open(readme, "r", encoding="utf-8") as f:
+    return current_streak, best_streak
+
+def update_readme():
+    total, category_counts = count_solved_problems()
+    today = datetime.utcnow().date().strftime("%Y-%m-%d")
+
+    # Load and update progress history
+    data = load_progress()
+    if total > 0:
+        if not data["dates"] or data["dates"][-1] != today:
+            data["dates"].append(today)
+    current_streak, best_streak = calculate_streak(data["dates"])
+    data["best_streak"] = max(data["best_streak"], best_streak)
+    save_progress(data)
+
+    # Read README
+    with open(README_PATH, "r", encoding="utf-8") as f:
         content = f.read()
-    pattern = r"(<!-- PROGRESS:START -->)(.*?)(<!-- PROGRESS:END -->)"
-    repl = r"\1\n" + new_block + r"\n\3"
-    new_content = re.sub(pattern, repl, content, flags=re.S)
-    if new_content != content:
-        with open(readme, "w", encoding="utf-8") as f:
-            f.write(new_content)
-        return True
-    return False
 
-def main():
-    total, counts = list_solutions()
-    commit_dates = get_repo_dates()
-    streak_now = current_streak(commit_dates)
-    streak_best = longest_streak(commit_dates)
+    # 🔹 Update Problems Solved badge
+    badge_pattern = r"(Problems%20Solved-)(\d+)"
+    content = re.sub(badge_pattern, f"Problems%20Solved-{total}", content)
 
-    block = []
-    block.append("## 📈 Progress")
-    block.append(f"- **Total solved:** {total}")
-    block.append(f"- **Current streak:** {streak_now} days")
-    block.append(f"- **Best streak:** {streak_best} days")
-    block.append("")
-    block.append(make_progress_bar(total, goal=200, width=34))
-    block.append("")
-    block.append("### By Category")
-    block.append(render_table(counts))
-    block.append("")
-    block.append("_Last updated: " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC") + "_")
+    # 🔹 Update progress section
+    progress_start = "<!-- PROGRESS:START -->"
+    progress_end = "<!-- PROGRESS:END -->"
 
-    changed = update_readme("\n".join(block))
-    if changed:
-        # commit back if README changed
-        subprocess.run(["git","config","user.name","github-actions[bot]"], cwd=ROOT)
-        subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"], cwd=ROOT)
-        subprocess.run(["git","add","README.md"], cwd=ROOT, check=False)
-        subprocess.run(["git","commit","-m","chore: auto-update progress in README"], cwd=ROOT, check=False)
-        subprocess.run(["git","push"], cwd=ROOT, check=False)
+    category_table = "| Category | Solved |\n|----------|--------|\n"
+    for cat, count in category_counts.items():
+        category_table += f"| `{cat}` | {count} |\n"
+
+    progress_text = f"""
+## 📈 Progress
+- **Total solved:** {total}
+- **Current streak:** {current_streak} days 🔥
+- **Best streak:** {data['best_streak']} days 🏆
+- **Last updated:** {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}
+
+### By Category
+{category_table}
+"""
+
+    new_content = re.sub(
+        f"{progress_start}.*?{progress_end}",
+        f"{progress_start}\n{progress_text}\n{progress_end}",
+        content,
+        flags=re.DOTALL,
+    )
+
+    with open(README_PATH, "w", encoding="utf-8") as f:
+        f.write(new_content)
 
 if __name__ == "__main__":
-    main()
+    update_readme()
