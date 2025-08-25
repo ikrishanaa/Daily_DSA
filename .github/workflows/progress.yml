@@ -1,0 +1,35 @@
+name: Update README Progress
+
+on:
+  push:
+    paths:
+      - '**.cpp'
+      - '**.py'
+      - '**.java'
+      - '**.ts'
+      - '**.js'
+      - '**.go'
+      - 'README.md'
+      - '.github/workflows/progress.yml'
+  schedule:
+    - cron: '15 17 * * *'   # runs daily at 17:15 UTC (~22:45 IST)
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true   # needed to push
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run updater
+        run: |
+          python3 tools/update_readme.py
