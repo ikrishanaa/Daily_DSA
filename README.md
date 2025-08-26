@@ -1,7 +1,7 @@
 # 🚀 Daily DSA Practice  
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Problems%20Solved-5-blue?logo=leetcode&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Problems%20Solved-6-blue?logo=leetcode&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Language-C++17-orange?style=for-the-badge" />
   <img src="https://img.shields.io/github/actions/workflow/status/ikrishanaa/Daily_DSA/progress.yml?label=Auto%20Update&style=for-the-badge" />
   <img src="https://img.shields.io/github/last-commit/ikrishanaa/Daily_DSA?style=for-the-badge" />
@@ -28,15 +28,15 @@ All solutions are organized **by topic** (`arrays/`, `dp/`, `graphs/`…), with 
 <!-- PROGRESS:START -->
 
 ## 📈 Progress
-- **Total solved:** 5
+- **Total solved:** 6
 - **Current streak:** 2 days 🔥
 - **Best streak:** 2 days 🏆
-- **Last updated:** 2025-08-26 14:15 UTC
+- **Last updated:** 2025-08-26 14:16 UTC
 
 ### By Category
 | Category | Solved |
 |----------|--------|
-| `arrays` | 1 |
+| `arrays` | 2 |
 | `strings` | 1 |
 | `dp` | 1 |
 | `graphs` | 1 |
