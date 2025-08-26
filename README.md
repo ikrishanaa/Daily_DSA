@@ -29,9 +29,9 @@ All solutions are organized **by topic** (`arrays/`, `dp/`, `graphs/`…), with 
 
 ## 📈 Progress
 - **Total solved:** 5
-- **Current streak:** 1 days 🔥
-- **Best streak:** 0 days 🏆
-- **Last updated:** 2025-08-25 20:04 UTC
+- **Current streak:** 2 days 🔥
+- **Best streak:** 2 days 🏆
+- **Last updated:** 2025-08-26 14:15 UTC
 
 ### By Category
 | Category | Solved |
