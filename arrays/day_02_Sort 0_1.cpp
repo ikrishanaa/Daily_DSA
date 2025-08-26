@@ -1,23 +1,20 @@
-#include <bits/stdc++.h> 
-vector<int> findArrayIntersection(vector<int> &arr1, int n, vector<int> &arr2, int m)
+void sortZeroesAndOne(int input[], int size)
 {
-	vector<int> ans;
-	int i=0, j=0;
+    int left =0;
+    int right = size-1;
 
-	while(i<n && j<m){
+    while(left<right){
 
-		if(arr1[i]==arr2[j]){
-			ans.push_back(arr1[i]);
-			i++;
-			j++;
-		}else if(arr1[i]<arr2[j]){
-			i++;
-		}else{
-			j++;
-
-		}
-
-	}
-	return ans;
-
+        while(input[left]==0 && left< right){
+            left++;
+        }
+        while(input[right]==1 && left<right){
+            right--;
+        }
+        if(left<right){
+            swap(input[left], input[right]);
+            left++;
+            right--;
+        }
+    }
 }
