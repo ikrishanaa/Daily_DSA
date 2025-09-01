@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, json, datetime, subprocess
+import os, json, datetime, subprocess, re
 
 META_FILE = ".meta.json"
 
@@ -13,6 +13,18 @@ def save_meta(meta):
     with open(META_FILE, "w") as f:
         json.dump(meta, f, indent=2)
 
+def get_all_cpp_files():
+    files = []
+    for root, _, fnames in os.walk("."):
+        for fname in fnames:
+            if fname.endswith(".cpp") and not fname.startswith("."):
+                files.append(os.path.join(root, fname))
+    return files
+
+def already_renamed(fname):
+    # Matches 01_day008_filename.cpp
+    return bool(re.match(r"^\d{2}_day\d{3}_", os.path.basename(fname)))
+
 def main():
     meta = load_meta()
     today = str(datetime.date.today())
@@ -22,25 +34,31 @@ def main():
         meta["last_day"] = today
         meta["current_day_count"] += 1
 
-    staged_files = subprocess.check_output(["git", "diff", "--cached", "--name-only"]).decode().splitlines()
+    changed = False
+    all_cpp = get_all_cpp_files()
 
-    for fname in staged_files:
-        if not fname.endswith(".cpp"):
+    for fname in all_cpp:
+        if already_renamed(fname):
             continue
-        # Skip already renamed files
-        if fname.startswith(tuple(str(i).zfill(2) for i in range(1, 200))):
-            continue  
 
         meta["file_counter"] += 1
-        new_name = f"{str(meta['file_counter']).zfill(2)}_day{str(meta['current_day_count']).zfill(3)}_" + fname.replace(" ", "_")
+        base = os.path.basename(fname).replace(" ", "_")
+        new_name = f"{str(meta['file_counter']).zfill(2)}_day{str(meta['current_day_count']).zfill(3)}_{base}"
 
-        os.rename(fname, new_name)
-        subprocess.run(["git", "add", new_name])
-        subprocess.run(["git", "reset", fname])  # remove old staged name
+        new_path = os.path.join(os.path.dirname(fname), new_name)
+        os.rename(fname, new_path)
 
-        print(f"Renamed: {fname} → {new_name}")
+        print(f"Renamed: {fname} → {new_path}")
+        changed = True
 
     save_meta(meta)
+
+    if changed:
+        # Stage files if inside a Git repo (local hook or GitHub Action)
+        try:
+            subprocess.run(["git", "add", "."], check=False)
+        except Exception:
+            pass
 
 if __name__ == "__main__":
     main()
