@@ -1,92 +1,85 @@
-# 🚀 Daily DSA Practice  
+# 📘 Daily DSA Journey  
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
+  <img src="https://img.shields.io/badge/Progress-Ongoing🚀-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/github/last-commit/ikrishanaa/Daily_DSA?style=for-the-badge&logo=github" />
   <img src="https://img.shields.io/badge/Problems%20Solved-19-blue?logo=leetcode&style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Language-C++17-orange?style=for-the-badge" />
   <img src="https://img.shields.io/github/actions/workflow/status/ikrishanaa/Daily_DSA/progress.yml?label=Auto%20Update&style=for-the-badge" />
-  <img src="https://img.shields.io/github/last-commit/ikrishanaa/Daily_DSA?style=for-the-badge" />
   <img src="https://komarev.com/ghpvc/?username=ikrishanaa&label=Profile%20Views&color=0e75b6&style=for-the-badge" />
-  <img src="https://img.shields.io/github/stars/ikrishanaa/Daily_DSA?style=for-the-badge" />
 </p>
 
 ---
 
-## 📌 About This Repo  
-This repository contains my **daily practice solutions** to LeetCode and Striver’s DSA Sheet.  
-I’m maintaining it to:  
-- ✅ Build strong problem-solving skills  
-- ✅ Track progress with automated streaks & progress updates  
-- ✅ Share learnings through `NOTE.md` explanations  
+## ✨ About This Repository  
 
-All solutions are organized **by topic** (`arrays/`, `dp/`, `graphs/`…), with paired notes describing the approach, complexity, and mistakes.  
+This repository tracks my **daily problem-solving journey in Data Structures & Algorithms (DSA)**.  
+Each commit is a small step towards mastering problem-solving and building a solid foundation for **competitive programming & technical interviews**.  
 
----
-
-## 📊 Progress (Auto-Updated)  
-> The section below is updated **daily** by GitHub Actions.  
-
-<!-- PROGRESS:START -->
-
-## 📈 Progress
-- **Total solved:** 19
-- **Current streak:** 8 days 🔥
-- **Best streak:** 8 days 🏆
-- **Last updated:** 2025-09-01 16:03 UTC
-
-### By Category
-| Category | Solved |
-|----------|--------|
-| `arrays` | 15 |
-| `strings` | 1 |
-| `dp` | 1 |
-| `graphs` | 1 |
-| `linked_list` | 1 |
-
-
-<!-- PROGRESS:END -->
+- 🧑‍💻 Written in **C++**  
+- 🔄 **Automatic file renaming** keeps everything neat (`XX_dayYYY_problem.cpp`)  
+- 📈 Consistent **daily practice log**  
 
 ---
 
-## 📂 Repo Structure  
-```
-Daily_DSA/
-│── README.md
-│── tools/
-│ └── update_readme.py
-│── .github/
-│ └── workflows/
-│ └── progress.yml
-│
-├── arrays/
-│ ├── day01_two_sum.cpp
-│ ├── day01_two_sum_NOTE.md
-│
-├── strings/
-│ ├── day02_longest_substring.cpp
-│ └── day02_longest_substring_NOTE.md
-│
-├── dp/
-│ ├── day03_climb_stairs.cpp
-│ └── day03_climb_stairs_NOTE.md
-│
-└── graphs/
-├── day04_number_of_islands.cpp
-└── day04_number_of_islands_NOTE.md
+## 📂 Repository Structure  
 
-```
+File naming format:XX_dayYYY_Problem_Name.cpp
+
+
+Where:  
+- `XX` → File number in sequence  
+- `dayYYY` → The practice day counter  
+- `Problem_Name` → The actual problem title  
+
+Example:07_day003_Two_Sum.cpp  
 
 
 ---
 
-## ⚠️ Disclaimer  
-These are my **personal solutions** created for practice and learning.  
-They may not always be the most optimal. Please use them as **reference only**, and try solving problems yourself before checking solutions.  
+## 🚀 Goals  
+
+- ✅ Strengthen **DSA fundamentals**  
+- ✅ Solve problems from **LeetCode, GFG, Codeforces, and more**  
+- ✅ Maintain **discipline with daily commits**  
+- ✅ Build an **interview-ready problem archive**  
 
 ---
 
-## ⭐ Support  
-If you find this repo useful, consider giving it a **star** ⭐ on GitHub.  
+## 🛠️ Tech Stack  
+
+- **Language:** C++  
+- **Automation:** GitHub Actions + Python script (for auto-renaming & tracking)  
+- **Editor:** VS Code / CLion  
 
 ---
 
+## 📊 Progress Tracking  
 
+| Day | Problem(s) Solved | File Example |
+|-----|-------------------|--------------|
+| 001 | Arrays, Search    | `01_day001_Search_In_Rotated_Sorted_Array.cpp` |
+| 002 | Two Sum, Sorting  | `04_day002_Two_Sum.cpp` |
+| ... | ...               | ... |
+
+📌 Full progress available in the repo under daily `.cpp` files.
+
+---
+
+## 🤝 Contribution  
+
+This is primarily a **personal log**, but if you have suggestions (better naming, optimization tips, or problem requests), feel free to:  
+- Open an **Issue**  
+- Submit a **Pull Request**  
+
+---
+
+## 🧭 Inspiration  
+
+> *“DSA is not just about solving problems. It’s about training your brain to think in patterns, optimize decisions, and create elegant solutions.”*  
+
+---
+
+<p align="center">  
+  💡 Built with discipline, automation, and lots of debugging.  
+</p>
