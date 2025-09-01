@@ -22,14 +22,14 @@ def get_all_cpp_files():
     return files
 
 def already_renamed(fname):
-    # Matches 01_day008_filename.cpp
+    # Matches "01_day008_filename.cpp"
     return bool(re.match(r"^\d{2}_day\d{3}_", os.path.basename(fname)))
 
 def main():
     meta = load_meta()
     today = str(datetime.date.today())
 
-    # Check if new day → increment streak day count
+    # Increment day count only if date changes
     if today != meta["last_day"]:
         meta["last_day"] = today
         meta["current_day_count"] += 1
@@ -39,22 +39,21 @@ def main():
 
     for fname in all_cpp:
         if already_renamed(fname):
+            # skip permanently
             continue
 
         meta["file_counter"] += 1
         base = os.path.basename(fname).replace(" ", "_")
         new_name = f"{str(meta['file_counter']).zfill(2)}_day{str(meta['current_day_count']).zfill(3)}_{base}"
-
         new_path = os.path.join(os.path.dirname(fname), new_name)
-        os.rename(fname, new_path)
 
+        os.rename(fname, new_path)
         print(f"Renamed: {fname} → {new_path}")
         changed = True
 
     save_meta(meta)
 
     if changed:
-        # Stage files if inside a Git repo (local hook or GitHub Action)
         try:
             subprocess.run(["git", "add", "."], check=False)
         except Exception:
