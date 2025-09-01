@@ -8,6 +8,8 @@ on:
 jobs:
   rename:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # allow push back
 
     steps:
       - name: Checkout code
