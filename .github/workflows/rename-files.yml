@@ -5,29 +5,30 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write   # 👈 allows the bot to push changes
+
 jobs:
-  rename:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write   # allow push back
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run renamer
-        run: |
-          python3 tools/rename_and_track.py
-
-      - name: Commit changes
+      - name: Run renamer script
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python tools/rename_and_track.py
+          
           git add .
-          git commit -m "Auto-rename files" || echo "No changes to commit"
+          git commit -m "Auto-rename files"
           git push
