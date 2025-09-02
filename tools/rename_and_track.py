@@ -7,7 +7,7 @@ META_FILE = ".meta.json"
 
 def load_meta():
     if not os.path.exists(META_FILE):
-        return {"file_count": 0, "current_day": 1, "last_date": ""}
+        return {"day_counter": 1, "problems_solved": 0}
     with open(META_FILE, "r") as f:
         return json.load(f)
 
@@ -15,38 +15,31 @@ def save_meta(meta):
     with open(META_FILE, "w") as f:
         json.dump(meta, f, indent=4)
 
-def format_filename(index, day, name):
-    # Clean filename: replace spaces & symbols
-    clean_name = re.sub(r'[^a-zA-Z0-9]+', '_', name).strip('_')
-    return f"{index:02d}_day{day:03d}_{clean_name}.cpp"
+def normalize_name(filename):
+    # Remove spaces and special characters
+    return re.sub(r'[^A-Za-z0-9_]', '_', filename)
 
 def main():
     meta = load_meta()
     today = datetime.now().strftime("%Y-%m-%d")
 
-    # Increment day if date changed
-    if meta["last_date"] != today:
-        meta["current_day"] += 1
-        meta["last_date"] = today
+    problems_added = 0
+    for root, _, files in os.walk("."):
+        for file in files:
+            if file.endswith(".cpp") and not re.match(r"^\d+_day\d+_", file):
+                problems_added += 1
+                meta["problems_solved"] += 1
+                file_num = str(meta["problems_solved"]).zfill(2)
+                day_num = str(meta["day_counter"]).zfill(3)
+                clean_name = normalize_name(file.replace(".cpp", ""))
+                new_name = f"{file_num}_day{day_num}_{clean_name}.cpp"
+                old_path = os.path.join(root, file)
+                new_path = os.path.join(root, new_name)
+                os.rename(old_path, new_path)
+                print(f"Renamed: {file} → {new_name}")
 
-    day = meta["current_day"]
-    file_count = meta["file_count"]
-
-    for folder in ["arrays", "dp", "graphs", "linked_list", "misc", "strings"]:
-        if not os.path.exists(folder):
-            continue
-
-        for filename in os.listdir(folder):
-            if filename.endswith(".cpp") and not filename.startswith(tuple("0123456789")):
-                file_count += 1
-                new_name = format_filename(file_count, day, filename.replace(".cpp", ""))
-                src = os.path.join(folder, filename)
-                dst = os.path.join(folder, new_name)
-                os.rename(src, dst)
-                print(f"Renamed: {filename} → {new_name}")
-
-    meta["file_count"] = file_count
-    save_meta(meta)
+    if problems_added > 0:
+        save_meta(meta)
 
 if __name__ == "__main__":
     main()
