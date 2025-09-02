@@ -1,12 +1,11 @@
 name: Daily DSA Automation
 
 on:
+  workflow_dispatch:
   push:
     paths:
-      - "**.cpp"       # Run instantly if a new .cpp file is added
-  schedule:
-    - cron: "0 0 * * *"  # Run every midnight (for progress/README update)
-  workflow_dispatch:      # Manual trigger
+      - "*.cpp"
+      - "*.py"
 
 jobs:
   rename-and-track:
@@ -14,22 +13,28 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: main
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run rename and track
-        run: python tools/rename_and_track.py
+      - name: Run rename and track script
+        run: |
+          python tools/rename_and_track.py
 
       - name: Commit renamed files
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin main --rebase
           git add .
           git diff --cached --quiet || git commit -m "Auto: Rename and track DSA files"
-          git push
+          git push origin HEAD:main
 
   update-readme:
     runs-on: ubuntu-latest
@@ -37,19 +42,25 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: main
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Run README updater
-        run: python tools/update_readme.py
+      - name: Run update readme script
+        run: |
+          python tools/update_readme.py
 
       - name: Commit README update
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin main --rebase
           git add README.md .meta.json
           git diff --cached --quiet || git commit -m "Auto: Update README and progress"
-          git push
+          git push origin HEAD:main
