@@ -3,18 +3,16 @@ name: Daily DSA Automation
 on:
   push:
     paths:
-      - '**/*.cpp'
+      - "**.cpp"       # Run instantly if a new .cpp file is added
   schedule:
-    - cron: "0 0 * * *"   # every day at midnight (UTC)
-  workflow_dispatch:      # manual trigger if needed
+    - cron: "0 0 * * *"  # Run every midnight (for progress/README update)
+  workflow_dispatch:      # Manual trigger
 
 jobs:
-  rename-files:
-    name: 🔄 Rename Newly Added Files
+  rename-and-track:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
-      - name: Checkout Repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -22,24 +20,22 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Run Rename Script
-        run: |
-          python tools/rename_and_track.py
+      - name: Run rename and track
+        run: python tools/rename_and_track.py
 
-      - name: Commit Changes (if any)
+      - name: Commit renamed files
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff-index --quiet HEAD || git commit -m "🤖 Auto-renamed new files"
+          git diff --cached --quiet || git commit -m "Auto: Rename and track DSA files"
           git push
 
   update-readme:
-    name: 🌙 Update Progress in README
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: rename-and-track
     steps:
-      - name: Checkout Repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -47,14 +43,13 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Run Update Script
-        run: |
-          python tools/update_readme.py
+      - name: Run README updater
+        run: python tools/update_readme.py
 
-      - name: Commit Changes
+      - name: Commit README update
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md .meta.json
-          git diff-index --quiet HEAD || git commit -m "🌙 Nightly progress update"
+          git diff --cached --quiet || git commit -m "Auto: Update README and progress"
           git push
