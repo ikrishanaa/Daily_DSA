@@ -7,24 +7,49 @@ def load_meta():
     with open(META_FILE, "r") as f:
         return json.load(f)
 
-def update_readme():
-    meta = load_meta()
-    problems_solved = meta.get("file_count", 0)
+def update_readme(meta):
+    solved = meta.get("problems_solved", 0)
+    day = meta.get("day_counter", 1)
 
-    with open(README_FILE, "r") as f:
-        content = f.read()
+    new_content = f"""# 📘 Daily DSA Journey  
 
-    # Replace Problems Solved badge
-    new_content = re.sub(
-        r"Problems%20Solved-[^-]+-blue",
-        f"Problems%20Solved-{problems_solved}-blue",
-        content
-    )
+<p align="center">
+  <img src="https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
+  <img src="https://img.shields.io/badge/Progress-Day%20{day}-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/github/last-commit/ikrishanaa/Daily_DSA?style=for-the-badge&logo=github" />
+  <img src="https://img.shields.io/badge/Problems%20Solved-{solved}-blue?logo=leetcode&style=for-the-badge" />
+</p>
 
+---
+
+## ✨ About This Repository  
+
+This repo tracks my **daily problem-solving journey in Data Structures & Algorithms (DSA)**.  
+Each commit is a small step towards mastering problem-solving and building a solid foundation for **competitive programming & technical interviews**.  
+
+- 🧑‍💻 Written in **C++**  
+- 🔄 **Automatic file renaming** keeps everything neat  
+- 📈 Consistent **daily progress tracking**  
+
+---
+
+## 📊 Stats  
+
+- **Day:** {day}  
+- **Problems Solved:** {solved}  
+
+---
+
+<p align="center">  
+💡 Built with discipline, automation, and lots of debugging.  
+</p>
+"""
     with open(README_FILE, "w") as f:
         f.write(new_content)
 
-    print(f"Updated README with {problems_solved} problems solved.")
+def main():
+    meta = load_meta()
+    update_readme(meta)
 
 if __name__ == "__main__":
-    update_readme()
+    main()
