@@ -1,63 +1,52 @@
-#!/usr/bin/env python3
-import os, json, datetime, subprocess, re
+import os
+import json
+import re
+from datetime import datetime
 
 META_FILE = ".meta.json"
 
 def load_meta():
     if not os.path.exists(META_FILE):
-        return {"last_day": str(datetime.date.today()), "current_day_count": 1, "file_counter": 0}
+        return {"file_count": 0, "current_day": 1, "last_date": ""}
     with open(META_FILE, "r") as f:
         return json.load(f)
 
 def save_meta(meta):
     with open(META_FILE, "w") as f:
-        json.dump(meta, f, indent=2)
+        json.dump(meta, f, indent=4)
 
-def get_all_cpp_files():
-    files = []
-    for root, _, fnames in os.walk("."):
-        for fname in fnames:
-            if fname.endswith(".cpp") and not fname.startswith("."):
-                files.append(os.path.join(root, fname))
-    return files
-
-def already_renamed(fname):
-    # Matches "01_day008_filename.cpp"
-    return bool(re.match(r"^\d{2}_day\d{3}_", os.path.basename(fname)))
+def format_filename(index, day, name):
+    # Clean filename: replace spaces & symbols
+    clean_name = re.sub(r'[^a-zA-Z0-9]+', '_', name).strip('_')
+    return f"{index:02d}_day{day:03d}_{clean_name}.cpp"
 
 def main():
     meta = load_meta()
-    today = str(datetime.date.today())
+    today = datetime.now().strftime("%Y-%m-%d")
 
-    # Increment day count only if date changes
-    if today != meta["last_day"]:
-        meta["last_day"] = today
-        meta["current_day_count"] += 1
+    # Increment day if date changed
+    if meta["last_date"] != today:
+        meta["current_day"] += 1
+        meta["last_date"] = today
 
-    changed = False
-    all_cpp = get_all_cpp_files()
+    day = meta["current_day"]
+    file_count = meta["file_count"]
 
-    for fname in all_cpp:
-        if already_renamed(fname):
-            # skip permanently
+    for folder in ["arrays", "dp", "graphs", "linked_list", "misc", "strings"]:
+        if not os.path.exists(folder):
             continue
 
-        meta["file_counter"] += 1
-        base = os.path.basename(fname).replace(" ", "_")
-        new_name = f"{str(meta['file_counter']).zfill(2)}_day{str(meta['current_day_count']).zfill(3)}_{base}"
-        new_path = os.path.join(os.path.dirname(fname), new_name)
+        for filename in os.listdir(folder):
+            if filename.endswith(".cpp") and not filename.startswith(tuple("0123456789")):
+                file_count += 1
+                new_name = format_filename(file_count, day, filename.replace(".cpp", ""))
+                src = os.path.join(folder, filename)
+                dst = os.path.join(folder, new_name)
+                os.rename(src, dst)
+                print(f"Renamed: {filename} → {new_name}")
 
-        os.rename(fname, new_path)
-        print(f"Renamed: {fname} → {new_path}")
-        changed = True
-
+    meta["file_count"] = file_count
     save_meta(meta)
-
-    if changed:
-        try:
-            subprocess.run(["git", "add", "."], check=False)
-        except Exception:
-            pass
 
 if __name__ == "__main__":
     main()
