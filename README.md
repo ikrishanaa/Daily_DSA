@@ -4,8 +4,8 @@
   <img src="https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
   <img src="https://img.shields.io/badge/Progress-Ongoing🚀-blueviolet?style=for-the-badge" />
   <img src="https://img.shields.io/github/last-commit/ikrishanaa/Daily_DSA?style=for-the-badge&logo=github" />
-  <img src="https://img.shields.io/badge/Problems%20Solved-20-blue?logo=leetcode&style=for-the-badge" />
-  <img src="https://img.shields.io/github/actions/workflow/status/ikrishanaa/Daily_DSA/progress.yml?label=Auto%20Update&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Problems%20Solved-Auto%20Count-blue?logo=leetcode&style=for-the-badge" />
+  <img src="https://img.shields.io/github/actions/workflow/status/ikrishanaa/Daily_DSA/dsa-auto.yml?label=Automation&style=for-the-badge" />
   <img src="https://komarev.com/ghpvc/?username=ikrishanaa&label=Profile%20Views&color=0e75b6&style=for-the-badge" />
 </p>
 
@@ -13,73 +13,64 @@
 
 ## ✨ About This Repository  
 
-This repository tracks my **daily problem-solving journey in Data Structures & Algorithms (DSA)**.  
-Each commit is a small step towards mastering problem-solving and building a solid foundation for **competitive programming & technical interviews**.  
+This repository is my **daily log of solving Data Structures & Algorithms (DSA) problems**.  
+Every file is automatically **renamed and tracked** by GitHub Actions, ensuring clean formatting and consistent naming:  
 
-- 🧑‍💻 Written in **C++**  
-- 🔄 **Automatic file renaming** keeps everything neat (`XX_dayYYY_problem.cpp`)  
-- 📈 Consistent **daily practice log**  
+XX_dayYYY_Problem_Name.cpp
 
----
-
-## 📂 Repository Structure  
-
-File naming format:XX_dayYYY_Problem_Name.cpp
-
+yaml
+Copy code
 
 Where:  
-- `XX` → File number in sequence  
-- `dayYYY` → The practice day counter  
-- `Problem_Name` → The actual problem title  
+- `XX` → Sequential problem number  
+- `dayYYY` → The day counter since I started  
+- `Problem_Name` → Problem title  
 
-Example:07_day003_Two_Sum.cpp  
-
+**Example:** `07_day008_Two_Sum.cpp`
 
 ---
 
 ## 🚀 Goals  
 
-- ✅ Strengthen **DSA fundamentals**  
-- ✅ Solve problems from **LeetCode, GFG, Codeforces, and more**  
-- ✅ Maintain **discipline with daily commits**  
-- ✅ Build an **interview-ready problem archive**  
+- ✅ Strengthen **core DSA skills**  
+- ✅ Prepare for **interviews & contests**  
+- ✅ Maintain **discipline with daily practice**  
+- ✅ Archive problems neatly with **automation**  
 
 ---
 
-## 🛠️ Tech Stack  
+## 📂 Automation  
 
-- **Language:** C++  
-- **Automation:** GitHub Actions + Python script (for auto-renaming & tracking)  
-- **Editor:** VS Code / CLion  
+- 🛠️ **File Renaming:**  
+  Automatically renames new `.cpp` files to the correct format on commit.  
+
+- 📊 **Progress Tracking:**  
+  Updates problem count and days solved in `.meta.json`.  
 
 ---
 
-## 📊 Progress Tracking  
+## 📊 Progress Example  
 
-| Day | Problem(s) Solved | File Example |
+| Day | Problem(s) Solved | Example File |
 |-----|-------------------|--------------|
 | 001 | Arrays, Search    | `01_day001_Search_In_Rotated_Sorted_Array.cpp` |
 | 002 | Two Sum, Sorting  | `04_day002_Two_Sum.cpp` |
 | ... | ...               | ... |
 
-📌 Full progress available in the repo under daily `.cpp` files.
+📌 Full log inside the repository (`.meta.json` keeps count).  
 
 ---
 
 ## 🤝 Contribution  
 
-This is primarily a **personal log**, but if you have suggestions (better naming, optimization tips, or problem requests), feel free to:  
-- Open an **Issue**  
-- Submit a **Pull Request**  
+This is a **personal journey**, but if you want to:  
+- Suggest problem ideas  
+- Share optimization tips  
 
----
-
-## 🧭 Inspiration  
-
-> *“DSA is not just about solving problems. It’s about training your brain to think in patterns, optimize decisions, and create elegant solutions.”*  
+👉 Open an **Issue** or a **Pull Request** anytime.  
 
 ---
 
 <p align="center">  
-  💡 Built with discipline, automation, and lots of debugging.  
+  💡 Built with discipline, automation, and endless debugging.  
 </p>
