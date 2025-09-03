@@ -2,57 +2,53 @@ import os
 import json
 from datetime import datetime
 
+# Metadata file
 META_FILE = ".meta.json"
-README_FILE = "README.md"
 
 def load_meta():
     if os.path.exists(META_FILE):
         with open(META_FILE, "r") as f:
             return json.load(f)
-    return {"days": {}, "last_update": None}
+    return {"solved": [], "total_solved": 0}
 
-def save_meta(meta):
+def save_meta(data):
     with open(META_FILE, "w") as f:
-        json.dump(meta, f, indent=2)
+        json.dump(data, f, indent=4)
 
-def update_readme(meta):
-    today = datetime.now().strftime("%Y-%m-%d")
-    day_number = len(meta["days"]) + 1
+def main():
+    meta = load_meta()
+    solved = meta.get("solved", [])
+    total = meta.get("total_solved", 0)
 
-    # If already updated today → don't add duplicate
-    if meta.get("last_update") == today:
-        return False  
+    # Look for any .cpp files without prefix number
+    cpp_files = [f for f in os.listdir(".") if f.endswith(".cpp")]
 
-    # If no new problems today, still log "Daily Commit ✅"
-    meta["days"][today] = {
-        "day": day_number,
-        "problems": ["Daily Commit ✅ (No new problem solved today)"]
-    }
-    meta["last_update"] = today
+    for f in cpp_files:
+        # If already renamed, skip
+        if any(f.startswith(f"{item['id']}.") for item in solved):
+            continue
+
+        # Assign next ID
+        next_id = total + 1
+        new_name = f"{next_id}. {f}"
+
+        # Rename file
+        os.rename(f, new_name)
+
+        # Update metadata
+        solved.append({
+            "id": next_id,
+            "filename": new_name,
+            "date": datetime.utcnow().strftime("%Y-%m-%d"),
+        })
+        total += 1
+        print(f"Renamed {f} → {new_name}")
+
+    # Save updated metadata
+    meta["solved"] = solved
+    meta["total_solved"] = total
     save_meta(meta)
-
-    # Generate README content dynamically
-    lines = []
-    lines.append("# 📘 Daily DSA Journey\n")
-    lines.append("This repository tracks my **daily problem-solving journey in Data Structures & Algorithms (DSA)**.\n")
-    lines.append("---\n")
-    lines.append("## 📊 Progress Log\n")
-    lines.append("| Day | Date | Problems Solved |\n")
-    lines.append("|-----|------|-----------------|\n")
-
-    for date, entry in sorted(meta["days"].items(), key=lambda x: x[1]["day"]):
-        problems = ", ".join(entry["problems"])
-        lines.append(f"| {entry['day']:03} | {date} | {problems} |\n")
-
-    with open(README_FILE, "w") as f:
-        f.writelines(lines)
-
-    return True
+    print(f"✅ Progress updated: {total} problems solved.")
 
 if __name__ == "__main__":
-    meta = load_meta()
-    updated = update_readme(meta)
-    if updated:
-        print("✅ README updated with today's progress.")
-    else:
-        print("ℹ️ README already up to date for today.")
+    main()
