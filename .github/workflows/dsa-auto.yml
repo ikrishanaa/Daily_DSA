@@ -1,55 +1,56 @@
 name: Daily DSA Automation
 
 on:
-  push:
-    paths:
-      - "**.cpp"       # Run instantly if a new .cpp file is added
+  workflow_dispatch:   # allow manual run
   schedule:
-    - cron: "0 0 * * *"  # Run every midnight (for progress/README update)
-  workflow_dispatch:      # Manual trigger
+    - cron: "0 0 * * *"   # runs daily at midnight UTC
 
 jobs:
   rename-and-track:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # we'll set our own
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
-      - name: Run rename and track
-        run: python tools/rename_and_track.py
+      - name: Run rename script
+        run: python3 rename_and_track.py
 
-      - name: Commit renamed files
+      - name: Commit changes
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff --cached --quiet || git commit -m "Auto: Rename and track DSA files"
-          git push
+          git commit -m "chore: auto-rename & track progress [skip ci]" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
 
   update-readme:
-    runs-on: ubuntu-latest
     needs: rename-and-track
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
-      - name: Run README updater
-        run: python tools/update_readme.py
+      - name: Run update script
+        run: python3 update_readme.py
 
-      - name: Commit README update
+      - name: Commit README
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md .meta.json
-          git diff --cached --quiet || git commit -m "Auto: Update README and progress"
-          git push
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: auto-update README progress [skip ci]" || echo "No README changes"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
