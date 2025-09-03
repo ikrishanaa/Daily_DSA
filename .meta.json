@@ -1,5 +1,7 @@
 {
-  "last_day": "2025-09-02",
-  "current_day_count": 2,
-  "file_counter": 20
+    "last_day": "2025-09-02",
+    "current_day_count": 2,
+    "file_counter": 20,
+    "solved": [],
+    "total_solved": 0
 }
