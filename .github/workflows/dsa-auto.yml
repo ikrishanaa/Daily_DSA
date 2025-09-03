@@ -1,9 +1,16 @@
 name: Daily DSA Automation
 
 on:
-  workflow_dispatch:   # allow manual run
+  workflow_dispatch:   # manual run
   schedule:
-    - cron: "0 0 * * *"   # runs daily at midnight UTC
+    - cron: "0 0 * * *"   # midnight daily UTC
+  push:
+    paths:
+      - "**.cpp"
+
+permissions:
+  contents: write   # <-- this gives push access
+
 
 jobs:
   rename-and-track:
