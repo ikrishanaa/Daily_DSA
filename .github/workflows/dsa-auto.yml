@@ -52,7 +52,7 @@ jobs:
           python-version: "3.x"
 
       - name: Run update script
-        run: tools/rename_and_track.py
+        run: python3 tools/update_readme.py
 
       - name: Commit README
         run: |
