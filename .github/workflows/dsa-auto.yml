@@ -13,13 +13,13 @@ permissions:
 
 
 jobs:
-  rename-and-track:
+  dsa-automation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          persist-credentials: false  # we'll set our own
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -29,13 +29,17 @@ jobs:
       - name: Run rename script
         run: python3 tools/rename_and_track.py
 
-      - name: Commit changes
+      - name: Run update script
+        run: python3 tools/update_readme.py
+
+      - name: Commit & Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "chore: auto-rename & track progress [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: auto-rename, track & update README [skip ci]" || echo "No changes"
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+
 
   update-readme:
     needs: rename-and-track
