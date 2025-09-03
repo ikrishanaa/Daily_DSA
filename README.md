@@ -112,11 +112,11 @@ Built-in GitHub Actions handle:
 ⭐ If this inspires you, give it a star and follow my journey!  
 
 
----
+
 
 <div align="center">
 
-💡 *Consistency beats intensity. Keep coding, keep growing.*  
+ 
 
 ---
 
