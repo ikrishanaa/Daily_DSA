@@ -4,44 +4,8 @@ from datetime import datetime
 META_FILE = ".meta.json"
 README_FILE = "README.md"
 
-HEADER = """# 📘 Daily DSA Journey  
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
-  <img src="https://img.shields.io/badge/Progress-Ongoing🚀-blueviolet?style=for-the-badge" />
-  <img src="https://img.shields.io/github/last-commit/ikrishanaa/Daily_DSA?style=for-the-badge&logo=github" />
-  <img src="https://img.shields.io/badge/Problems%20Solved-{count}-blue?logo=leetcode&style=for-the-badge" />
-  <img src="https://komarev.com/ghpvc/?username=ikrishanaa&label=Profile%20Views&color=0e75b6&style=for-the-badge" />
-</p>
-
----
-"""
-
-ABOUT = """## ✨ About This Repository  
-
-This repository tracks my **daily problem-solving journey in Data Structures & Algorithms (DSA)**.  
-Each commit is a small step towards mastering problem-solving and building a solid foundation for **competitive programming & technical interviews**.  
-
-- 🧑‍💻 Written in **C++**  
-- 🔄 **Automatic file renaming** keeps everything neat (`N. Problem_Name.cpp`)  
-- 📈 Consistent **daily practice log**  
-
----
-"""
-
-PROGRESS_HEADER = """## 📊 Progress Tracking  
-
-| # | Problem | Date Solved |
-|---|----------|-------------|
-"""
-
-FOOTER = """
----
-
-<p align="center">  
-  💡 Built with discipline, automation, and lots of debugging.  
-</p>
-"""
+START_MARKER = "<!-- PROGRESS_START -->"
+END_MARKER = "<!-- PROGRESS_END -->"
 
 def load_meta():
     try:
@@ -50,28 +14,39 @@ def load_meta():
     except FileNotFoundError:
         return {"solved": [], "total_solved": 0}
 
-def generate_readme(meta):
+def generate_progress_table(meta):
     solved = meta.get("solved", [])
     count = meta.get("total_solved", 0)
 
-    # Replace {count} in header
-    content = HEADER.replace("{count}", str(count))
-    content += ABOUT
-    content += PROGRESS_HEADER
+    table = f"### 📊 Progress Tracking ({count} problems solved)\n\n"
+    table += "| # | Problem | Date Solved |\n"
+    table += "|---|----------|-------------|\n"
 
-    # Add rows for each problem
     for item in solved:
-        content += f"| {item['id']} | {item['filename']} | {item['date']} |\n"
+        table += f"| {item['id']} | {item['filename']} | {item['date']} |\n"
 
-    content += FOOTER
-    return content
+    return table
 
 def main():
     meta = load_meta()
-    new_readme = generate_readme(meta)
+    progress_table = generate_progress_table(meta)
 
+    # Load current README
+    with open(README_FILE, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # If markers don’t exist, add them once
+    if START_MARKER not in content or END_MARKER not in content:
+        content += f"\n\n{START_MARKER}\n{progress_table}\n{END_MARKER}\n"
+    else:
+        # Replace only the section between markers
+        before = content.split(START_MARKER)[0]
+        after = content.split(END_MARKER)[1]
+        content = f"{before}{START_MARKER}\n{progress_table}\n{END_MARKER}{after}"
+
+    # Save updated README
     with open(README_FILE, "w", encoding="utf-8") as f:
-        f.write(new_readme)
+        f.write(content)
 
     print(f"✅ README.md updated with {meta['total_solved']} problems solved.")
 
