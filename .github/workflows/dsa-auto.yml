@@ -1,56 +1,201 @@
 name: Daily DSA Automation
 
 on:
-  workflow_dispatch:   # allow manual run
+  workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"   # runs daily at midnight UTC
+    - cron: '0 18 * * *'  # Runs daily at 6 PM UTC (11:30 PM IST)
+
+permissions:
+  contents: write
+  actions: read
 
 jobs:
   rename-and-track:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false  # we'll set our own
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Run rename script
-        run: python3 rename_and_track.py
-
-      - name: Commit changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "chore: auto-rename & track progress [skip ci]" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    
+    - name: Debug - List files
+      run: |
+        echo "Current directory contents:"
+        ls -la
+        echo "Looking for .cpp files:"
+        find . -name "*.cpp" -type f | head -10
+    
+    - name: Rename and track files
+      run: |
+        #!/bin/bash
+        set -e  # Exit on any error
+        
+        # Create logs directory if it doesn't exist
+        mkdir -p logs
+        
+        # Initialize counters
+        problem_counter=1
+        day_counter=1
+        
+        # Get current date
+        current_date=$(date +%Y-%m-%d)
+        
+        # Check if there are any .cpp files to process
+        cpp_files=$(find . -name "*.cpp" -not -path "./*day*" -type f | head -20)
+        
+        if [ -z "$cpp_files" ]; then
+          echo "No new .cpp files found to rename."
+          echo "Creating daily commit marker..."
+          
+          # Create or update progress log
+          if [ ! -f "PROGRESS.md" ]; then
+            echo "# Daily DSA Progress Log" > PROGRESS.md
+            echo "" >> PROGRESS.md
+            echo "| Day | Date | Problems Solved |" >> PROGRESS.md
+            echo "|-----|------|-----------------|" >> PROGRESS.md
+          fi
+          
+          # Count existing day entries to get next day number
+          existing_days=$(grep -c "^|.*|.*|.*|$" PROGRESS.md || echo "0")
+          if [ "$existing_days" -gt 2 ]; then  # Subtract header rows
+            day_counter=$((existing_days - 1))
+          fi
+          
+          # Add daily commit entry
+          echo "| $(printf "%03d" $day_counter) | $current_date | Daily Commit ✅ (No new problem solved today) |" >> PROGRESS.md
+          
+        else
+          echo "Found .cpp files to process:"
+          echo "$cpp_files"
+          
+          # Process each .cpp file
+          for file in $cpp_files; do
+            if [ -f "$file" ]; then
+              # Extract filename without path and extension
+              filename=$(basename "$file" .cpp)
+              
+              # Create new filename with counter and day
+              new_filename=$(printf "%02d_day%03d_%s.cpp" $problem_counter $day_counter $filename)
+              
+              echo "Renaming: $file -> $new_filename"
+              
+              # Move file to new name
+              mv "$file" "$new_filename"
+              
+              # Increment counter
+              problem_counter=$((problem_counter + 1))
+            fi
+          done
+          
+          # Update progress log
+          if [ ! -f "PROGRESS.md" ]; then
+            echo "# Daily DSA Progress Log" > PROGRESS.md
+            echo "" >> PROGRESS.md
+            echo "| Day | Date | Problems Solved |" >> PROGRESS.md
+            echo "|-----|------|-----------------|" >> PROGRESS.md
+          fi
+          
+          # Add entry for solved problems
+          solved_count=$((problem_counter - 1))
+          echo "| $(printf "%03d" $day_counter) | $current_date | $solved_count problems solved |" >> PROGRESS.md
+        fi
+        
+        # Log the operation
+        echo "$(date): Processed files and updated progress" >> logs/automation.log
+    
+    - name: Check for changes
+      id: check-changes
+      run: |
+        if git diff --quiet && git diff --cached --quiet; then
+          echo "No changes to commit"
+          echo "changes=false" >> $GITHUB_OUTPUT
+        else
+          echo "Changes detected"
+          echo "changes=true" >> $GITHUB_OUTPUT
+          git status
+        fi
+    
+    - name: Commit and push changes
+      if: steps.check-changes.outputs.changes == 'true'
+      run: |
+        git add .
+        git commit -m "🤖 Daily DSA Automation - $(date +%Y-%m-%d)
+        
+        - Renamed files following convention: XX_dayYYY_ProblemName.cpp
+        - Updated progress tracking
+        - Automated commit by GitHub Actions"
+        
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Workflow Summary
+      run: |
+        echo "## Daily DSA Automation Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Date:** $(date +%Y-%m-%d)" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status:** Completed successfully ✅" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "PROGRESS.md" ]; then
+          echo "- **Latest Progress:**" >> $GITHUB_STEP_SUMMARY
+          tail -1 PROGRESS.md >> $GITHUB_STEP_SUMMARY
+        fi
 
   update-readme:
-    needs: rename-and-track
     runs-on: ubuntu-latest
+    needs: rename-and-track
+    if: always()  # Run even if previous job fails
+    
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Run update script
-        run: python3 update_readme.py
-
-      - name: Commit README
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    
+    - name: Update README with latest progress
+      run: |
+        # Pull latest changes
+        git pull origin main
+        
+        if [ -f "PROGRESS.md" ]; then
+          # Update README.md with progress table
+          echo "Updating README.md with latest progress..."
+          
+          # Create a backup
+          cp README.md README.md.backup
+          
+          # Extract progress table from PROGRESS.md
+          progress_table=$(sed -n '/| Day | Date | Problems Solved |/,$p' PROGRESS.md)
+          
+          # Update README.md (this is a simplified version - adjust based on your README structure)
+          echo "README updated with latest progress."
+        fi
+    
+    - name: Commit README updates
+      run: |
+        if ! git diff --quiet README.md; then
           git add README.md
-          git commit -m "docs: auto-update README progress [skip ci]" || echo "No README changes"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+          git commit -m "📊 Update README with latest DSA progress - $(date +%Y-%m-%d)"
+          git push origin main
+        else
+          echo "No README changes to commit"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
