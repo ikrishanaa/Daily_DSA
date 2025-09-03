@@ -20,7 +20,7 @@ jobs:
           python-version: "3.x"
 
       - name: Run rename script
-        run: python3 rename_and_track.py
+        run: python3 tools/rename_and_track.py
 
       - name: Commit changes
         run: |
@@ -45,7 +45,7 @@ jobs:
           python-version: "3.x"
 
       - name: Run update script
-        run: python3 update_readme.py
+        run: tools/rename_and_track.py
 
       - name: Commit README
         run: |
