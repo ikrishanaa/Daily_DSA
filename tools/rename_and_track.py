@@ -20,29 +20,39 @@ def main():
     solved = meta.get("solved", [])
     total = meta.get("total_solved", 0)
 
-    # Look for any .cpp files without prefix number
-    cpp_files = [f for f in os.listdir(".") if f.endswith(".cpp")]
-
-    for f in cpp_files:
-        # If already renamed, skip
-        if any(f.startswith(f"{item['id']}.") for item in solved):
+    # Walk through all subfolders
+    for root, _, files in os.walk("."):
+        # Skip hidden dirs like .git and tools
+        if root.startswith("./.git") or root.startswith("./tools") or root.startswith("./.github"):
             continue
 
-        # Assign next ID
-        next_id = total + 1
-        new_name = f"{next_id}. {f}"
+        for f in files:
+            if not f.endswith(".cpp"):
+                continue
 
-        # Rename file
-        os.rename(f, new_name)
+            old_path = os.path.join(root, f)
 
-        # Update metadata
-        solved.append({
-            "id": next_id,
-            "filename": new_name,
-            "date": datetime.utcnow().strftime("%Y-%m-%d"),
-        })
-        total += 1
-        print(f"Renamed {f} → {new_name}")
+            # Skip if already renamed (starts with "<number>. ")
+            if f.split()[0].rstrip(".").isdigit():
+                continue
+
+            # Assign next ID
+            next_id = total + 1
+            new_name = f"{next_id}. {f}"
+            new_path = os.path.join(root, new_name)
+
+            # Rename file
+            os.rename(old_path, new_path)
+
+            # Update metadata
+            solved.append({
+                "id": next_id,
+                "filename": new_name,
+                "folder": root,
+                "date": datetime.utcnow().strftime("%Y-%m-%d"),
+            })
+            total += 1
+            print(f"Renamed {old_path} → {new_path}")
 
     # Save updated metadata
     meta["solved"] = solved
