@@ -32,7 +32,6 @@ int lastOcc(vector<int>& arr, int n, int key){
     if(arr[mid]==key){
       ans=mid;
       s=mid+1;
-
       
 
     }
