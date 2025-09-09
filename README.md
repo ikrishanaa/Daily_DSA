@@ -8,6 +8,7 @@
   <img src="https://komarev.com/ghpvc/?username=ikrishanaa&label=Profile%20Views&color=0e75b6&style=for-the-badge" />
 </p>
 
+
 ---
 ## ✨ About This Repository  
 
@@ -17,12 +18,6 @@ Each commit is a small step towards mastering problem-solving and building a sol
 - 🧑‍💻 Written in **C++**  
 - 🔄 **Automatic file renaming** keeps everything neat (`N. Problem_Name.cpp`)  
 - 📈 Consistent **daily practice log**  
-
----
-## 📊 Progress Tracking  
-
-| # | Problem | Date Solved |
-|---|----------|-------------|
 
 ---
 
