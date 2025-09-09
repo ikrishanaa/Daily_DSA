@@ -46,7 +46,6 @@ int lastOcc(vector<int>& arr, int n, int key){
 
   }
   return ans;
-
 }
 
 pair<int, int> firstAndLastPosition(vector<int>& arr, int n, int k)
