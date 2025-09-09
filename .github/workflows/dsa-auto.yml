@@ -1,9 +1,4 @@
 
----
-
-# 4) `.github/workflows/dsa-auto.yml`
-
-```yaml
 name: Daily DSA Automation
 
 on:
