@@ -1,6 +1,6 @@
 # 📘 Daily DSA Journey  
 
-<img src="https://img.shields.io/badge/Problems%20Solved-20-blue?logo=leetcode&style=for-the-badge" alt="Problems Solved"/>
+<img src="https://img.shields.io/badge/Problems%20Solved-21-blue?logo=leetcode&style=for-the-badge" alt="Problems Solved"/>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" />
@@ -29,7 +29,7 @@ Each commit is a small step towards mastering problem-solving and building a sol
 
 
 <!-- PROGRESS_START -->
-## 📊 Progress Tracking (43 problems solved)
+## 📊 Progress Tracking (44 problems solved)
 
 | # | Problem | Date Solved |
 |---:|---|:---:|
@@ -74,6 +74,7 @@ Each commit is a small step towards mastering problem-solving and building a sol
 | 20 | [20. 18_day001_file.cpp](./dp/20. 18_day001_file.cpp) | 2025-09-03 |
 | 20 | [20_day_01_8_19_day001_Painters_Partition_Problem.cpp](./arrays/20_day_01_8_19_day001_Painters_Partition_Problem.cpp) | 2025-09-09 |
 | 21 | [21_day_01_9_07_day001_02_day07_69_Sqrtx.cpp](./arrays/21_day_01_9_07_day001_02_day07_69_Sqrtx.cpp) | 2025-09-09 |
+| 21 | [21_day_01_xyx.cpp](./arrays/21_day_01_xyx.cpp) | 2025-09-09 |
 | 22 | [22_day_01_19_17_day001_file.cpp](./strings/22_day_01_19_17_day001_file.cpp) | 2025-09-09 |
 | 23 | [23_day_01_20_18_day001_file.cpp](./dp/23_day_01_20_18_day001_file.cpp) | 2025-09-09 |
 <!-- PROGRESS_END -->
