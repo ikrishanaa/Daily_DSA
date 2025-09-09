@@ -122,7 +122,148 @@
             "filename": "20. 18_day001_file.cpp",
             "folder": "./dp",
             "date": "2025-09-03"
+        },
+        {
+            "id": 1,
+            "filename": "01_day_01_1_01_day001_dap.cpp",
+            "folder": "linked_list",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 2,
+            "filename": "02_day_01_2_02_day001_file.cpp",
+            "folder": "graphs",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 3,
+            "filename": "03_day_01_10_10_day001_day05_First_and_Last_Position_of_an_Element_In_Sorted_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 4,
+            "filename": "04_day_01_11_09_day001_day03_pair_sum.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 5,
+            "filename": "05_day_01_12_20_day002_33_Search_in_Rotated_Sorted_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 6,
+            "filename": "06_day_01_13_14_day001_day01_two_sum.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 7,
+            "filename": "07_day_01_14_15_day001_day04_75_Sort_Colors.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 8,
+            "filename": "08_day_01_15_08_day001_03_day08_410_Split_Array_Largest_Sum.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 9,
+            "filename": "09_day_01_153_Find_Minimum_in_Rotated_Sorted_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 10,
+            "filename": "10_day_01_154_Find_Minimum_in_Rotated_Sorted_Array_II.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 11,
+            "filename": "11_day_01_16_04_day001_day04_189_Rotate_Array_02.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 12,
+            "filename": "12_day_01_17_13_day001_day03_two_sum_optimize.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 13,
+            "filename": "13_day_01_18_16_day001_day05_34_Find_First_and_Last_Position_of_Element_in_Sorted_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 14,
+            "filename": "14_day_01_3_11_day001_day04_189_Rotate_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 15,
+            "filename": "15_day_01_4_06_day001_day_02_Intersection_Of_Two_Sorted_Arrays.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 16,
+            "filename": "16_day_01_5_05_day001_day06_852_Peak_Index_in_a_Mountain_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 17,
+            "filename": "17_day_01_6_12_day001_day_02_Sort_0_1.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 18,
+            "filename": "18_day_01_7_03_day001_01_day07_Search_In_Rotated_Sorted_Array.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 19,
+            "filename": "19_day_01_704_Binary_Search.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 20,
+            "filename": "20_day_01_8_19_day001_Painters_Partition_Problem.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 21,
+            "filename": "21_day_01_9_07_day001_02_day07_69_Sqrtx.cpp",
+            "folder": "arrays",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 22,
+            "filename": "22_day_01_19_17_day001_file.cpp",
+            "folder": "strings",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 23,
+            "filename": "23_day_01_20_18_day001_file.cpp",
+            "folder": "dp",
+            "date": "2025-09-09"
         }
     ],
-    "total_solved": 20
+    "total_solved": 20,
+    "problem_counter": 23,
+    "day_counter": 1,
+    "last_commit_date": "2025-09-09"
 }
