@@ -1,67 +1,59 @@
 name: Daily DSA Automation
 
 on:
-  workflow_dispatch:   # manual run
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # Runs the workflow at midnight UTC every day
   schedule:
-    - cron: "0 0 * * *"   # midnight daily UTC
+    - cron: "0 0 * * *"
+
+  # Runs the workflow on a push to the repository
   push:
     paths:
-      - "**.cpp"
+      # Triggers the workflow only if .cpp files are changed
+      - '**.cpp'
 
+# Sets permissions for the GITHUB_TOKEN to allow writing to the repository
 permissions:
-  contents: write   # <-- this gives push access
-
+  contents: write
 
 jobs:
-  dsa-automation:
+  # A single job to handle the entire automation process
+  automate_progress:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
+      # Step 1: Check out the repository's code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
+      # Step 2: Set up the Python environment
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: '3.10'
 
-      - name: Run rename script
+      # Step 3: Run the script to rename files and track progress
+      - name: Run Renaming and Tracking Script
         run: python3 tools/rename_and_track.py
 
-      - name: Run update script
+      # Step 4: Run the script to update the README file
+      - name: Run README Update Script
         run: python3 tools/update_readme.py
 
-      - name: Commit & Push changes
+      # Step 5: Commit and push all changes back to the repository
+      - name: Commit and Push Changes
         run: |
+          # Configure git with bot credentials
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "chore: auto-rename, track & update README [skip ci]" || echo "No changes"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
-
-
-  update-readme:
-    needs: rename-and-track
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Run update script
-        run: python3 tools/update_readme.py
-
-      - name: Commit README
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "docs: auto-update README progress [skip ci]" || echo "No README changes"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+          
+          # Add all changes to the staging area
+          git add -A
+          
+          # Commit the changes if there are any, otherwise echo a message
+          # The "[skip ci]" flag prevents the workflow from triggering itself in a loop
+          git commit -m "chore: auto-update progress and README [skip ci]" || echo "No changes to commit"
+          
+          # Push the changes to the current branch
+          git push
