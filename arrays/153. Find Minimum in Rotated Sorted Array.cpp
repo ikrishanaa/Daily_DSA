@@ -14,9 +14,6 @@ public:
             }
         }
         return nums[s];
-
-
-
         
     }
 };
