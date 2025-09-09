@@ -1,7 +1,3 @@
-# This script is updated to handle the new naming convention:
-# 01_day_01_problem.cpp, 02_day_01_problem.cpp, etc.
-# The day counter only advances on the first commit of a new calendar day.
-
 import os
 import json
 import re
@@ -51,6 +47,7 @@ def main():
     for root, dirs, files in os.walk("."):
         dirs[:] = [d for d in dirs if d not in EXCLUDED_DIRS]
         for filename in sorted(files):
+            # Process only files that don't match the final naming scheme
             if filename.endswith(TARGET_EXTENSION) and not re.match(r"^\d+_day_\d+.*\.cpp$", filename):
                 new_files_to_process.append(Path(root) / filename)
 
