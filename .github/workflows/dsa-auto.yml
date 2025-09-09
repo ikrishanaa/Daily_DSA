@@ -1,63 +1,60 @@
-# This is the full, corrected GitHub Actions workflow file.
-# It uses a single job to automate the entire process efficiently.
-
 name: Daily DSA Automation
 
 on:
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-  # Triggers the workflow at midnight (00:00) UTC every day.
+  # Runs the workflow at midnight UTC every day
   schedule:
     - cron: "0 0 * * *"
 
-  # Triggers the workflow whenever a push event includes changes to any .cpp file.
+  # Runs the workflow on a push to the repository
   push:
     paths:
+      # Triggers the workflow only if .cpp files are changed
       - '**.cpp'
 
-# Defines the permissions for the GITHUB_TOKEN used by the workflow.
-# 'contents: write' is required to allow the action to commit changes back to the repository.
+# Sets permissions for the GITHUB_TOKEN to allow writing to the repository
 permissions:
   contents: write
 
 jobs:
-  # The single job that handles the entire automation process.
+  # A single job to handle the entire automation process
   automate_progress:
-    runs-on: ubuntu-latest # Specifies that the job will run on the latest version of Ubuntu.
+    runs-on: ubuntu-latest
     steps:
-      # Step 1: Checks out your repository's code so the workflow can access it.
+      # Step 1: Check out the repository's code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 2: Sets up a Python environment for the scripts to run in.
+      # Step 2: Set up the Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10' # Specifies the Python version to use.
+          python-version: '3.10'
 
-      # Step 3: Runs the script to rename new files and track them in .meta.json.
+      # Step 3: Run the script to rename files and track progress
       - name: Run Renaming and Tracking Script
-        id: rename
         run: python3 tools/rename_and_track.py
 
-      # Step 4: Runs the script to update the README.md with the latest progress.
+      # Step 4: Run the script to update the README file
       - name: Run README Update Script
         run: python3 tools/update_readme.py
 
-      # Step 5: Commits and pushes all changes (renamed files, .meta.json, README.md) back to the repository.
+      # Step 5: Commit and push all changes back to the repository
       - name: Commit and Push Changes
         run: |
-          # Configure git with the credentials of the github-actions bot.
+          # Configure git with bot credentials
           git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Add all modified and new files to the staging area.
+          # Add all changes to the staging area
           git add -A
           
-          # Commit the changes. The `|| echo "No changes to commit"` part prevents an error if there's nothing to commit.
-          # The "[skip ci]" message in the commit prevents this commit from triggering the workflow again, avoiding an infinite loop.
+          # Commit the changes if there are any, otherwise echo a message
+          # The "[skip ci]" flag prevents the workflow from triggering itself in a loop
           git commit -m "chore: auto-update progress and README [skip ci]" || echo "No changes to commit"
           
-          # Push the changes to the current branch.
+          # Push the changes to the current branch
           git push
+
