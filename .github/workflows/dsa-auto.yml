@@ -1,60 +1,60 @@
+
+---
+
+# 4) `.github/workflows/dsa-auto.yml`
+
+```yaml
 name: Daily DSA Automation
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-  # Runs the workflow at midnight UTC every day
+  workflow_dispatch:   # manual run
   schedule:
-    - cron: "0 0 * * *"
-
-  # Runs the workflow on a push to the repository
+    - cron: "0 0 * * *"   # runs daily at 00:00 UTC
   push:
+    # trigger only when .cpp files are added/modified anywhere in repo
     paths:
-      # Triggers the workflow only if .cpp files are changed
-      - '**.cpp'
+      - "**/*.cpp"
 
-# Sets permissions for the GITHUB_TOKEN to allow writing to the repository
 permissions:
   contents: write
 
 jobs:
-  # A single job to handle the entire automation process
-  automate_progress:
+  dsa-automation:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Check out the repository's code
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Step 2: Set up the Python environment
-      - name: Set up Python
-        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          persist-credentials: true
+          fetch-depth: 0
 
-      # Step 3: Run the script to rename files and track progress
-      - name: Run Renaming and Tracking Script
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Make tools executable
+        run: |
+          chmod +x tools/*.py || true
+
+      - name: Run rename_and_track
         run: python3 tools/rename_and_track.py
 
-      # Step 4: Run the script to update the README file
-      - name: Run README Update Script
+      - name: Run update_readme
         run: python3 tools/update_readme.py
 
-      # Step 5: Commit and push all changes back to the repository
-      - name: Commit and Push Changes
+      - name: Commit & push changes (if any)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Configure git with bot credentials
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Add all changes to the staging area
-          git add -A
-          
-          # Commit the changes if there are any, otherwise echo a message
-          # The "[skip ci]" flag prevents the workflow from triggering itself in a loop
-          git commit -m "chore: auto-update progress and README [skip ci]" || echo "No changes to commit"
-          
-          # Push the changes to the current branch
-          git push
-
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add . || true
+          # Only commit if there's something to commit
+          if ! git diff --quiet --cached; then
+            git commit -m "chore(dsa): auto-rename, track & update README [skip ci]" || echo "commit failed"
+            # push changes back to the branch that triggered the workflow
+            git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "No changes to commit."
+          fi

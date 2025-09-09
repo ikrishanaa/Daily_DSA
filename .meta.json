@@ -1,7 +1,8 @@
 {
-    "last_day": "2025-09-02",
-    "current_day_count": 2,
+    "last_date": "2025-09-09",
+    "day_number": 1,
     "file_counter": 20,
+    "total_solved": 20,
     "solved": [
         {
             "id": 1,
@@ -261,9 +262,5 @@
             "folder": "dp",
             "date": "2025-09-09"
         }
-    ],
-    "total_solved": 20,
-    "problem_counter": 23,
-    "day_counter": 1,
-    "last_commit_date": "2025-09-09"
+    ]
 }
