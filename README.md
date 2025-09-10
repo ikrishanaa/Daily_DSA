@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-# 📘 Daily DSA Journey
-=======
 # 📘 Daily DSA Journey  
 
-<img src="https://img.shields.io/badge/Problems%20Solved-21-blue?logo=leetcode&style=for-the-badge" alt="Problems Solved"/>
->>>>>>> a7fcd5332f77ca355b9b26b728cb10620073037e
 
 <p align="center">
   <!-- Problems Solved badge (auto-updated by scripts) -->
