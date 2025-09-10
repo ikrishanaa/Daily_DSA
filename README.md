@@ -52,10 +52,9 @@ Every `.cpp` file is automatically renamed, tracked in `.meta.json`, and reflect
 ### 📉 Problem Distribution (Chart)
 
 <p align="center">
-  <img src="https://quickchart.io/chart?c={type:'bar',data:{labels:['Arrays','Strings','Graphs','DP','LinkedList','Others'],datasets:[{label:'Problems Solved',data:[15,5,4,6,4,10]}]}}" alt="Problem Distribution Chart"/>
+  <img src="https://quickchart.io/chart?c=%7Btype%3A%27bar%27%2Cdata%3A%7Blabels%3A%5B%27Arrays%27%2C%27Strings%27%2C%27Graphs%27%2C%27DP%27%2C%27LinkedList%27%2C%27Others%27%5D%2Cdatasets%3A%5B%7Blabel%3A%27Problems%20Solved%27%2Cdata%3A%5B15%2C5%2C4%2C6%2C4%2C10%5D%7D%5D%7D%7D" 
+       alt="Problem Distribution Chart"/>
 </p>
-
----
 
 <!-- PROGRESS_START -->
 ## 📊 Detailed Progress Log (auto-generated)
