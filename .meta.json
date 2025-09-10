@@ -1,8 +1,8 @@
 {
     "last_date": "2025-09-09",
     "day_number": 1,
-    "file_counter": 20,
-    "total_solved": 20,
+    "file_counter": 21,
+    "total_solved": 21,
     "solved": [
         {
             "id": 1,
@@ -260,6 +260,12 @@
             "id": 23,
             "filename": "23_day_01_20_18_day001_file.cpp",
             "folder": "dp",
+            "date": "2025-09-09"
+        },
+        {
+            "id": 21,
+            "filename": "21_day_01_xyx.cpp",
+            "folder": "./arrays",
             "date": "2025-09-09"
         }
     ]
