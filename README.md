@@ -136,6 +136,4 @@ Every `.cpp` file is automatically renamed, tracked in `.meta.json`, and reflect
 
 ---
 
-<p align="center">  
-💡 Built with automation, discipline, and lots of debugging.  
-</p>
+ >💡 _Built with automation, discipline, and lots of debugging._
