@@ -3,7 +3,7 @@
 
 <p align="center">
   <!-- Problems Solved badge (auto-updated by scripts) -->
-  <img src="https://img.shields.io/badge/Problems%20Solved-21-blue?logo=leetcode&style=for-the-badge" alt="Problems Solved"/>
+  <img src="https://img.shields.io/badge/Problems%20Solved-22-blue?logo=leetcode&style=for-the-badge" alt="Problems Solved"/>
   &nbsp;
   <img src="https://img.shields.io/badge/Language-C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="Language C++"/>
   &nbsp;
@@ -57,7 +57,7 @@ Every `.cpp` file is automatically renamed, tracked in `.meta.json`, and reflect
 </p>
 
 <!-- PROGRESS_START -->
-## 📊 Progress Tracking (44 problems solved)
+## 📊 Progress Tracking (45 problems solved)
 
 | # | Problem | Date Solved |
 |---:|---|:---:|
@@ -104,6 +104,7 @@ Every `.cpp` file is automatically renamed, tracked in `.meta.json`, and reflect
 | 21 | [21_day_01_9_07_day001_02_day07_69_Sqrtx.cpp](./arrays/21_day_01_9_07_day001_02_day07_69_Sqrtx.cpp) | 2025-09-09 |
 | 21 | [21_day_01_xyx.cpp](./arrays/21_day_01_xyx.cpp) | 2025-09-09 |
 | 22 | [22_day_01_19_17_day001_file.cpp](./strings/22_day_01_19_17_day001_file.cpp) | 2025-09-09 |
+| 22 | [22_day_04_Squares_of_a_Sorted_Array.cpp](./arrays/22_day_04_Squares_of_a_Sorted_Array.cpp) | 2025-09-12 |
 | 23 | [23_day_01_20_18_day001_file.cpp](./dp/23_day_01_20_18_day001_file.cpp) | 2025-09-09 |
 <!-- PROGRESS_END -->
 

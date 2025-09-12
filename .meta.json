@@ -1,8 +1,8 @@
 {
     "last_date": "2025-09-12",
     "day_number": 4,
-    "file_counter": 21,
-    "total_solved": 21,
+    "file_counter": 22,
+    "total_solved": 22,
     "solved": [
         {
             "id": 1,
@@ -267,6 +267,12 @@
             "filename": "21_day_01_xyx.cpp",
             "folder": "./arrays",
             "date": "2025-09-09"
+        },
+        {
+            "id": 22,
+            "filename": "22_day_04_Squares_of_a_Sorted_Array.cpp",
+            "folder": "./arrays",
+            "date": "2025-09-12"
         }
     ]
 }
